@@ -11,15 +11,15 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-    <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
-    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-    <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
+    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    <maven-shade-plugin.version>3.5.2</maven-shade-plugin.version>
+    <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+    <exec-maven-plugin.version>3.4.1</exec-maven-plugin.version>
 
-    <vertx.version>4.4.1</vertx.version>
+    <vertx.version>4.5.10</vertx.version>
     <junit-jupiter.version>5.9.1</junit-jupiter.version>
 
-    <main.verticle>questions.MainVerticle</main.verticle>
+    <main.verticle>applications.MainVerticle</main.verticle>
     <launcher.class>io.vertx.core.Launcher</launcher.class>
   </properties>
 
@@ -36,70 +36,51 @@
   </dependencyManagement>
 
   <dependencies>
-    <!-- Vert.x dependencies -->
+    <!-- Vert.x Core and Web -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
-      <version>4.4.1</version>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
-      <version>4.4.1</version>
     </dependency>
+
+    <!-- Vert.x PostgreSQL Client -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-pg-client</artifactId>
-      <version>4.4.1</version>
     </dependency>
-
-    <!-- PostgreSQL and Hibernate Reactive dependencies -->
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>42.5.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate.reactive</groupId>
-      <artifactId>hibernate-reactive-core</artifactId>
-      <version>1.1.5.Final</version>
-    </dependency>
-
-    <!-- Jackson dependencies -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>2.15.0-rc2</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.15.0-rc2</version>
-    </dependency>
-
-    <!-- Lombok dependency -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.22</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- SCRAM authentication dependency -->
     <dependency>
       <groupId>com.ongres.scram</groupId>
       <artifactId>client</artifactId>
       <version>2.1</version>
     </dependency>
 
-    <!-- Activation dependency -->
+    <!-- Other Dependencies -->
     <dependency>
-      <groupId>com.sun.activation</groupId>
-      <artifactId>javax.activation</artifactId>
-      <version>1.2.0</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.17.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.17.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.34</version>
     </dependency>
 
-    <!-- Test dependencies -->
+    <!-- Testing -->
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-client</artifactId>
+      <version>${vertx.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-junit5</artifactId>
@@ -112,27 +93,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-web-client</artifactId>
-      <version>4.4.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.12.4</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>1.4.200</version>
+      <version>5.13.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -143,7 +106,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
         <configuration>
-          <release>17</release>
+          <release>21</release>
         </configuration>
       </plugin>
       
@@ -176,6 +139,9 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <additionalProfiles>test</additionalProfiles>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -192,7 +158,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.7</version>
+        <version>0.8.12</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -211,4 +177,19 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+        <id>test</id>
+        <build>
+            <resources>
+                <resource>
+                    <directory>src/test/resources</directory>
+                    <includes>
+                        <include>META-INF/persistence.xml</include>
+                    </includes>
+                </resource>
+            </resources>
+        </build>
+    </profile>
+  </profiles>
 </project>
