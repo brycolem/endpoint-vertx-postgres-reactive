@@ -19,7 +19,7 @@ public class DatabaseConfiguration {
                 .setUser(dbConfig.getString("user"))
                 .setPassword(dbConfig.getString("password"));
 
-        PoolOptions poolOptions = new PoolOptions().setMaxSize(5);
+        PoolOptions poolOptions = new PoolOptions().setMaxSize(15);
 
         pgPool = Pool.pool(vertx, connectOptions, poolOptions);
         return Future.succeededFuture();

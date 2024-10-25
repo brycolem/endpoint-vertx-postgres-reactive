@@ -28,7 +28,7 @@ end
 -- Run the container
 local run_command = string.format(
     "podman run -d -p 8001:8001 --network=host " ..
-    "-e DATABASE=%q -e DB_USER=%q -e DB_PWD=%q " ..
+    "--ulimit nofile=65536:65536 -e DATABASE=%q -e DB_USER=%q -e DB_PWD=%q " ..
     "--replace --name vertx-postgres-reactive vertx-postgres-reactive:latest",
     DATABASE, DB_USER, DB_PWD
 )
